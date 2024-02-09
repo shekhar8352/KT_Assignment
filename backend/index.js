@@ -16,6 +16,9 @@ app.get('/', (req, res) => {
 
 // ROUTES
 app.use('/api/user',require('./routes/api/user'));
+app.use('/api/authuser',require('./routes/api/authUser'));
+app.use('/api/device',require('./routes/api/device'));
+app.use('/api/room',require('./routes/api/room'));
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is listening on port ${process.env.PORT}`)

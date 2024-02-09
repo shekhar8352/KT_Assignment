@@ -14,7 +14,6 @@ const roomSchema = new mongoose.Schema(
     device_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Device",
-      required: true,
     },
   },
   {
