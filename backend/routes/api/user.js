@@ -96,6 +96,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+// ROUTE_TO_GET_USERS_BY_ID
 router.get("/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select("-password");
