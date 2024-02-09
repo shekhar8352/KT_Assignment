@@ -19,6 +19,9 @@ app.use('/api/user',require('./routes/api/user'));
 app.use('/api/authuser',require('./routes/api/authUser'));
 app.use('/api/device',require('./routes/api/device'));
 app.use('/api/room',require('./routes/api/room'));
+app.use('/api/admin',require('./routes/api/admin'));
+app.use('/api/authadmin',require('./routes/api/authAdmin'));
+
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is listening on port ${process.env.PORT}`)

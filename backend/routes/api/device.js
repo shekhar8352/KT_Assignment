@@ -10,13 +10,13 @@ const User = require("../../models/user.model.js");
 // ROUTE_TO_CREATE_DEVICE
 router.post("/create", async (req, res) => {
   try {
-    const { alloted_to_user, state } = req.body;
+    const { name, alloted_to_user, state } = req.body;
     const newDevice = new Device({
+      name,
       alloted_to_user,
       state,
     });
 
-    // Save the device to the database
     const savedDevice = await newDevice.save();
 
     res.status(201).json(savedDevice);
@@ -30,22 +30,30 @@ router.post("/create", async (req, res) => {
 // ROUTE_TO_ALLOCATE_DEVICE
 router.put("/allocate/:deviceId", async (req, res) => {
   try {
-    const { userId } = req.body;
+    const { name, userId } = req.body;
     const deviceId = req.params.deviceId;
-
-    // console.log(userId);
-
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(400).json({ msg: "Invalid user ID" });
-    }
 
     const device = await Device.findById(deviceId);
     if (!device) {
-      return res.status(404).json({ msg: "Device not found" });
+      return res.status(404).json("Device not found");
     }
 
-    device.alloted_to_user = userId;
+    const user = await User.findById(userId);
+
+    if (user && userId.toString() !== device.alloted_to_user.toString())
+    {
+      if (!user) {
+        return res.status(400).json("Invalid user ID");
+      }
+  
+      const existingDevice = await Device.findOne({ alloted_to_user });
+      if (existingDevice) {
+        return res.status(400).json("Device already assigned to a user");
+      }
+    }
+
+    device.alloted_to_user = userId || device.alloted_to_user;
+    device.name = name  || device.name;
 
     const updatedDevice = await device.save();
 
@@ -145,7 +153,6 @@ router.get("/:deviceId", async (req, res) => {
   try {
     const deviceId = req.params.deviceId;
 
-    // Find the device by ID in the database
     const device = await Device.findById(deviceId);
 
     if (!device) {
@@ -153,6 +160,20 @@ router.get("/:deviceId", async (req, res) => {
     }
 
     res.json(device);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json("Server Error");
+  }
+});
+
+// ROUTE_TO_FETCH_ALL_THE_DEVICE_ALLOCATED_TO_SEPCIFIC_USER
+router.get("/user/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const userDevices = await Device.find({ alloted_to_user: userId });
+
+    res.json(userDevices);
   } catch (error) {
     console.error(error);
     res.status(500).json("Server Error");
