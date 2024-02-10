@@ -19,6 +19,7 @@ const useAdmin = () => {
       });
 
       const { token } = response.data;
+      localStorage.setItem("Token", token);
 
       setRegistrationResult({ success: true, token, errors: null, loading: false });
     } catch (error) {

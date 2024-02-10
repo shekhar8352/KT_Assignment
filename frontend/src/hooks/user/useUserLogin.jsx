@@ -1,4 +1,3 @@
-// useUserLogin.js
 import { useState } from 'react';
 import axios from 'axios';
 
@@ -14,12 +13,13 @@ const useUserLogin = () => {
     try {
       setLoginResult({ success: null, token: null, errors: null, loading: true });
 
-      const response = await axios.post('http://localhost:8000/api/users/login', {
+      const response = await axios.post('http://localhost:8000/api/authuser', {
         username,
         password,
       });
 
       const { token } = response.data;
+      localStorage.setItem("Token", token);
 
       setLoginResult({ success: true, token, errors: null, loading: false });
     } catch (error) {

@@ -29,6 +29,7 @@ router.post(
               admin:{
                   id: admin.id,
                   username: admin.username,
+                  role: admin.role
               }
           }
           console.log("admin log in payload:",payload);

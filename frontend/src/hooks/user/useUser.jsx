@@ -21,6 +21,7 @@ const useUser = () => {
       const response = await axios.post('http://localhost:8000/api/users/register', userData);
 
       const { token } = response.data;
+      localStorage.setItem("Token", token);
 
       setRegistrationResult({ success: true, token, errors: null, loading: false });
     } catch (error) {

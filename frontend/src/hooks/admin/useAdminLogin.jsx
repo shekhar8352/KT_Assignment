@@ -13,12 +13,13 @@ const useAdminLogin = () => {
     try {
       setLoginResult({ success: null, token: null, errors: null, loading: true });
 
-      const response = await axios.post('http://localhost:8000/api/admin/login', {
+      const response = await axios.post('http://localhost:8000/api/authadmin', {
         username,
         password,
       });
 
       const { token } = response.data;
+      localStorage.setItem("Token", token);
 
       setLoginResult({ success: true, token, errors: null, loading: false });
     } catch (error) {

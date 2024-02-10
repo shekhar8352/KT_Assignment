@@ -64,6 +64,7 @@ router.post(
           last_name: user.last_name,
           username: user.username,
           email: user.email,
+          role: 'user'
         },
       };
       console.log("new user payload:", payload);
