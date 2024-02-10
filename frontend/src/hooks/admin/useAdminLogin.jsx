@@ -18,6 +18,8 @@ const useAdminLogin = () => {
         password,
       });
 
+      console.log(response.data.role);
+
       const { token } = response.data;
       localStorage.setItem("Token", token);
 

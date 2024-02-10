@@ -20,6 +20,11 @@ const SidebarComp = ({ onMenuItemClick }) => {
     // handleToggleSidebar();
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("Token");
+    window.location.href = '/admin-login';
+  };
+
   return (
     <div id="app" style={{ height: "100vh", display: "flex" }}>
       <Sidebar style={{ height: "100vh" }} collapsed={collapsed}>
@@ -65,7 +70,7 @@ const SidebarComp = ({ onMenuItemClick }) => {
             Device States
           </MenuItem>
 
-          <MenuItem icon={<LogoutIcon />}>Logout</MenuItem>
+          <MenuItem icon={<LogoutIcon />} onClick={handleLogout}>Logout</MenuItem>
         </Menu>
       </Sidebar>
     </div>

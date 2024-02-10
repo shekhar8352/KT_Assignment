@@ -6,7 +6,7 @@ import AssignDevices from "../components/AssignDevices";
 import ChangeState from "../components/ChangeState";
 
 const UserDashboard = () => {
-  const [activeMenuItem, setActiveMenuItem] = useState(null);
+  const [activeMenuItem, setActiveMenuItem] = useState("State");
 
   const handleMenuItemClick = (menuItem) => {
     setActiveMenuItem(menuItem);

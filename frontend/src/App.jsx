@@ -13,25 +13,56 @@ import AdminDashboard from "./pages/AdminDashboard"
 
 const isAuthenticated = !!localStorage.getItem("Token");
 
-const token = localStorage.getItem('Token');
+const getRoleFromToken = () => {
+  const token = localStorage.getItem("Token");
+  if (token) {
+    try {
+      const tokenParts = token.split(".");
+      const payload = JSON.parse(atob(tokenParts[1]));
+      // console.log(payload);
+      const isAdmin = payload.admin.role === "admin" ? true : false;
 
-if (token) {
-  const tokenParts = token.split('.');
-  const payload = JSON.parse(atob(tokenParts[1])); 
-  console.log('User information:', payload.user);
-} else {
-  console.log('Token not found in localStorage');
-}
+      // console.log(userId);
+      return isAdmin;
+    } catch (error) {
+      console.log("Error parsing token payload:", error);
+    }
+  }
 
+  return null;
+};
+
+const isAdmin = getRoleFromToken();
+console.log(isAdmin);
 
 function App() {
   return (
     <Router>
       <Routes>
-      <Route path="/" element={<UserLogin />} />
-      <Route path="/admin-login" element={<AdminLogin />} />
-      <Route path="/user-dashboard" element={<UserDashboard />} />
-      <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        {/* Redirect to user-dashboard if authenticated, else show UserLogin */}
+        <Route
+          path="/"
+          element={
+            isAuthenticated ? <Navigate to="/user-dashboard" replace /> : <UserLogin />
+          }
+        />
+        {/* Public routes */}
+        <Route path="/admin-login" element={<AdminLogin />} />
+        <Route path="/" element={<UserLogin />} />
+        
+        {/* Protected routes */}
+        {isAuthenticated ? (
+          isAdmin ? (
+            // Admin Dashboard
+            <Route path="admin-dashboard" element={<AdminDashboard />} />
+          ) : (
+            // User Dashboard
+            <Route path="user-dashboard" element={<UserDashboard />} />
+          )
+        ) : (
+          // Redirect unauthenticated users to the home page
+          <Route path="*" element={<Navigate to="/" replace />} />
+        )}
       </Routes>
     </Router>
   );

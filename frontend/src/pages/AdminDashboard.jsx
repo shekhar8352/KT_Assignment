@@ -7,7 +7,7 @@ import AllocateDevice from "../components/AllocateDevice";
 import DeviceStates from "../components/DeviceStates";
 
 const AdminDashboard = () => {
-  const [activeMenuItem, setActiveMenuItem] = useState(null);
+  const [activeMenuItem, setActiveMenuItem] = useState("createUser");
 
   const handleMenuItemClick = (menuItem) => {
     setActiveMenuItem(menuItem);
