@@ -15,7 +15,7 @@ const useCreateRoom = ({ name, user_id, device_id }) => {
       try {
         setCreateRoomResult({ success: null, data: null, errors: null, loading: true });
 
-        const response = await axios.post('http://localhost:8000/api/rooms/create', {
+        const response = await axios.post('http://localhost:8000/api/room/create', {
           name,
           user_id,
           device_id,

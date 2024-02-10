@@ -26,11 +26,10 @@ router.post("/create", async (req, res) => {
           .status(400)
           .json("Device not allocated to the specified user");
       }
+    }
 
-      const existingRoom = await Room.findOne({ device_id });
-      if (existingRoom) {
-        return res.status(400).json("Device already assigned to a room");
-      }
+    if (device.alloted_to_user) {
+      return res.status(400).json("Device already assigned to a user");
     }
 
     const newRoom = new Room({
