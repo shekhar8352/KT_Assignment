@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const useUpdateRoom = (roomId, { name, device_id }) => {
+const useUpdateRoom = () => {
   const [updateRoomResult, setUpdateRoomResult] = useState({
     success: null,
     data: null,
@@ -9,13 +9,11 @@ const useUpdateRoom = (roomId, { name, device_id }) => {
     loading: false,
   });
 
-  useEffect(() => {
-    const updateRoom = async () => {
+    const updateRoom = async (roomId, device_id ) => {
       try {
         setUpdateRoomResult({ success: null, data: null, errors: null, loading: true });
 
-        const response = await axios.put(`http://localhost:8000/api/rooms/edit/${roomId}`, {
-          name,
+        const response = await axios.put(`http://localhost:8000/api/room/edit/${roomId}`, {
           device_id,
         });
 
@@ -32,10 +30,7 @@ const useUpdateRoom = (roomId, { name, device_id }) => {
       }
     };
 
-    updateRoom();
-  }, [roomId, name, device_id]);
-
-  return { ...updateRoomResult };
+  return { updateRoom, ...updateRoomResult };
 };
 
 export default useUpdateRoom;

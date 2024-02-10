@@ -14,7 +14,7 @@ const useRoomByUser = (userId) => {
       try {
         setRoomsByUserResult({ success: null, data: null, errors: null, loading: true });
 
-        const response = await axios.get(`http://localhost:8000/api/rooms/user/${userId}`);
+        const response = await axios.get(`http://localhost:8000/api/room/user/${userId}`);
 
         setRoomsByUserResult({
           success: true,

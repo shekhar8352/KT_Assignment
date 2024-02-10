@@ -26,10 +26,10 @@ router.post("/create", async (req, res) => {
           .status(400)
           .json("Device not allocated to the specified user");
       }
-    }
 
-    if (device.alloted_to_user) {
-      return res.status(400).json("Device already assigned to a user");
+      if (device.alloted_to_user) {
+        return res.status(400).json("Device already assigned to a user");
+      }
     }
 
     const newRoom = new Room({
@@ -84,7 +84,7 @@ router.delete("/delete/:roomId", async (req, res) => {
 // ROUTE_TO_UPDATE_ROOM
 router.put("/edit/:roomId", async (req, res) => {
   try {
-    const { name, device_id } = req.body;
+    const { device_id } = req.body;
     const roomId = req.params.roomId;
 
     const room = await Room.findById(roomId);
@@ -94,26 +94,23 @@ router.put("/edit/:roomId", async (req, res) => {
     }
 
     const device = await Device.findById(device_id);
+    if (!device) {
+      return res.status(400).json("Invalid device ID");
+    }
 
-    if (device && device_id.toString() !== room.device_id.toString()) {
-      if (!device) {
-        return res.status(400).json("Invalid device ID");
-      }
-
-      if (device.alloted_to_user.toString() !== room.user_id.toString()) {
-        return res
-          .status(400)
-          .json("Device not allocated to the specified user");
-      }
-
+    if (device) {
       const existingRoom = await Room.findOne({ device_id });
       if (existingRoom) {
         return res.status(400).json("Device already assigned to a room");
       }
     }
 
-    room.name = name || room.name;
-    room.device_id = device_id || room.device_id;
+    if(room.device_id !== undefined)
+    {
+      return res.status(400).json("Room already has a device");
+    }
+
+    room.device_id = device_id;
 
     const updatedRoom = await room.save();
 

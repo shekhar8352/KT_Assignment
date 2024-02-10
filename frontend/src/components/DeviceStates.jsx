@@ -10,28 +10,33 @@ import {
 } from '@mui/material';
 import useAllDevices from '../hooks/device/useAllDevice';
 import useGetUserByID from '../hooks/user/useGetUserById';
+import axios from 'axios';
 
 const DeviceState = () => {
   const { data: devices, loading: devicesLoading } = useAllDevices();
   const [usernames, setUsernames] = useState({});
-
+  
   useEffect(() => {
     const fetchUsernames = async () => {
       const usernamesMap = {};
       const promises = devices.map(async (device) => {
-        if (device.allotted_to_user) {
+        if (device.alloted_to_user) {
           try {
-            const user = await useGetUserByID(device.allotted_to_user);
-            usernamesMap[device.allotted_to_user] = user?.username || 'Not Found';
+            // const user = useGetUserByID(device.alloted_to_user);
+        const user = await axios.get(`http://localhost:8000/api/user/${device.alloted_to_user}`);
+            // console.log("user", user);
+            usernamesMap[device.alloted_to_user] = user.data?.username || 'Not Found';
           } catch (error) {
             console.error('Error fetching username:', error);
-            usernamesMap[device.allotted_to_user] = 'Not Found';
+            usernamesMap[device.alloted_to_user] = 'Not Found';
           }
         }
       });
 
       await Promise.all(promises);
       setUsernames(usernamesMap);
+
+      console.log("adsd",usernamesMap); // eslint-disable-line no-console
     };
 
     if (devices && devices.length > 0) {
@@ -47,7 +52,7 @@ const DeviceState = () => {
           <TableHead>
             <TableRow>
               <TableCell>Device Name</TableCell>
-              <TableCell>Allotted To User</TableCell>
+              <TableCell>Alloted To User</TableCell>
               <TableCell>Light</TableCell>
               <TableCell>Fan</TableCell>
               <TableCell>Mis</TableCell>
@@ -68,9 +73,9 @@ const DeviceState = () => {
                 <TableRow key={device._id}>
                   <TableCell>{device.name}</TableCell>
                   <TableCell>
-                    {device.allotted_to_user
-                      ? usernames[device.allotted_to_user] || 'Not Found'
-                      : 'Not Allotted'}
+                    {device.alloted_to_user
+                      ? usernames[device.alloted_to_user] || 'Not Found'
+                      : 'Not Alloted'}
                   </TableCell>
                   <TableCell>{device.state ? device.state.light : 'N/A'}</TableCell>
                   <TableCell>{device.state ? device.state.fan : 'N/A'}</TableCell>

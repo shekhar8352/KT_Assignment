@@ -1,8 +1,7 @@
-// useCreateRoom.js
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 
-const useCreateRoom = ({ name, user_id, device_id }) => {
+const useCreateRoom = () => {
   const [createRoomResult, setCreateRoomResult] = useState({
     success: null,
     data: null,
@@ -10,8 +9,7 @@ const useCreateRoom = ({ name, user_id, device_id }) => {
     loading: false,
   });
 
-  useEffect(() => {
-    const createRoom = async () => {
+    const createRoom = async ( name, user_id, device_id = null ) => {
       try {
         setCreateRoomResult({ success: null, data: null, errors: null, loading: true });
 
@@ -34,10 +32,7 @@ const useCreateRoom = ({ name, user_id, device_id }) => {
       }
     };
 
-    createRoom();
-  }, [name, user_id, device_id]);
-
-  return { ...createRoomResult };
+  return { createRoom, ...createRoomResult };
 };
 
 export default useCreateRoom;

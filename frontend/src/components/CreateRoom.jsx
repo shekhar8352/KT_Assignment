@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import useCreateRoom from "../hooks/room/useCreateRoom";
 import useUserDevices from "../hooks/device/useUserDevices";
 
 const CreateRoom = () => {
-  // const [roomName, setRoomName] = useState("");
-  const [allotedDevice, setAllotedDevice] = useState('');
+  const [roomName, setRoomName] = useState("");
+  const [allotedDevice, setAllotedDevice] = useState("");
   const [allotedDeviceId, setAllotedDeviceId] = useState(null);
 
-  // const { createRoom, success, errors, loading } = useCreateRoom();
+  const { createRoom, success, errors, loading } = useCreateRoom();
 
   const getUserIDFromToken = () => {
     const token = localStorage.getItem("Token");
@@ -19,10 +21,10 @@ const CreateRoom = () => {
         const payload = JSON.parse(atob(tokenParts[1]));
 
         const userId = payload.user.id;
-        console.log(userId);
+        // console.log(userId);
         return userId;
       } catch (error) {
-        console.error("Error parsing token payload:", error);
+        console.log("Error parsing token payload:", error);
       }
     }
 
@@ -30,20 +32,16 @@ const CreateRoom = () => {
   };
 
   const userId = getUserIDFromToken();
-  const { devices, loading: usersLoading } = useUserDevices(userId);
 
-  useEffect(() => {
-    // Load users only if not already loaded
-    if (!devices.length && !usersLoading) {
-      useUserDevices()
-    }
-  }, [useUserDevices, devices, usersLoading]);
+  const { data: devices, load } = useUserDevices(userId);
 
   const handleAllotedUserChange = (event) => {
     const selectedDevice = event.target.value;
     setAllotedDevice(selectedDevice);
-    
-    const selectedDeviceObj = devices.find((device) => device.name === selectedDevice);
+
+    const selectedDeviceObj = devices.find(
+      (device) => device.name === selectedDevice
+    );
     if (selectedDeviceObj) {
       // setAllotedUserId(selectedDeviceObj._id);
       setAllotedDeviceId(selectedDeviceObj?._id || null);
@@ -52,16 +50,17 @@ const CreateRoom = () => {
     }
   };
 
-  // const handleCreateRoom = (e) => {
-  //   e.preventDefault();
-  //   if (allotedDeviceId || allotedDeviceId === '') {
-  //     // console.log(allotedUserId);
-  //     createRoom(deviceName, userId, allotedDeviceId);
-  //   } else {
-  //     // console.log("NO");
-  //     createRoom(deviceName, userId);
-  //   }
-  // };
+  const handleCreateRoom = (e) => {
+    e.preventDefault();
+    console.log("hy");
+    if (allotedDeviceId || allotedDeviceId === "") {
+      console.log("hi",allotedDeviceId);
+      createRoom(roomName, userId, allotedDeviceId);
+    } else {
+      console.log("NO");
+      createRoom(roomName, userId);
+    }
+  };
 
   return (
     <Box
@@ -75,13 +74,13 @@ const CreateRoom = () => {
       <Typography variant="h4" gutterBottom>
         Create Room
       </Typography>
-      {/* <TextField
+      <TextField
         label="Room Name"
         variant="outlined"
         margin="normal"
         value={roomName}
         onChange={(e) => setRoomName(e.target.value)}
-      /> */}
+      />
       <Select
         label="Alloted Device"
         value={allotedDevice}
@@ -89,27 +88,26 @@ const CreateRoom = () => {
         fullWidth
         margin="normal"
       >
-        {devices.map((device) => (
-          <MenuItem key={device._id} value={device._id}>
-            {device._id}
+        {devices && devices.map((device) => (
+          <MenuItem key={device._id} value={device.name}>
+            {device.name}
           </MenuItem>
         ))}
       </Select>
-      {/* <Button
+      <Button
         variant="contained"
         color="primary"
         onClick={handleCreateRoom}
         disabled={loading || !roomName.trim()}
       >
         {loading ? "Creating Room..." : "Create Room"}
-      </Button> */}
-      {/* {errors && <Typography color="error">{errors[0].msg}</Typography>}
+      </Button>
+      {errors && <div style={{ color: 'red', marginTop: 2 }}>{errors[0].msg}</div>}
       {success && (
-        <Typography color="success">Room created successfully!</Typography>
-      )} */}
+        <div style={{ color: 'green', marginTop: 2 }}>Device created successfully!</div>
+      )}
     </Box>
   );
 };
 
 export default CreateRoom;
-
