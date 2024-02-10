@@ -18,7 +18,7 @@ const useUser = () => {
         loading: true,
       });
 
-      const response = await axios.post('http://localhost:8000/api/users/register', userData);
+      const response = await axios.post('http://localhost:8000/api/user/register', userData);
 
       const { token } = response.data;
       localStorage.setItem("Token", token);

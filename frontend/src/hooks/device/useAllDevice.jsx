@@ -12,7 +12,7 @@ const useAllDevices = () => {
   useEffect(() => {
     const fetchAllDevices = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/devices/all');
+        const response = await axios.get('http://localhost:8000/api/device/all');
 
         setAllDevicesResult({
           success: true,

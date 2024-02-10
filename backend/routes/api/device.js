@@ -30,7 +30,7 @@ router.post("/create", async (req, res) => {
 // ROUTE_TO_ALLOCATE_DEVICE
 router.put("/allocate/:deviceId", async (req, res) => {
   try {
-    const { name, userId } = req.body;
+    const { userId } = req.body;
     const deviceId = req.params.deviceId;
 
     const device = await Device.findById(deviceId);
@@ -38,22 +38,16 @@ router.put("/allocate/:deviceId", async (req, res) => {
       return res.status(404).json("Device not found");
     }
 
-    const user = await User.findById(userId);
-
-    if (user && userId.toString() !== device.alloted_to_user.toString())
-    {
-      if (!user) {
-        return res.status(400).json("Invalid user ID");
-      }
-  
-      const existingDevice = await Device.findOne({ alloted_to_user });
-      if (existingDevice) {
-        return res.status(400).json("Device already assigned to a user");
-      }
+    if (device.alloted_to_user) {
+      return res.status(400).json("Device already assigned to a user");
     }
 
-    device.alloted_to_user = userId || device.alloted_to_user;
-    device.name = name  || device.name;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(400).json("Invalid user ID");
+    }
+    
+    device.alloted_to_user = userId;
 
     const updatedDevice = await device.save();
 
@@ -63,6 +57,7 @@ router.put("/allocate/:deviceId", async (req, res) => {
     res.status(500).json("Server Error");
   }
 });
+
 
 // ROUTE_TO_CHANGE_LIGHT_STATE
 router.put("/change-light/:deviceId", async (req, res) => {
@@ -179,6 +174,8 @@ router.get("/user/:userId", async (req, res) => {
     res.status(500).json("Server Error");
   }
 });
+
+
 
 
 module.exports = router;

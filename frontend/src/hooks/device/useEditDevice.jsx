@@ -1,4 +1,3 @@
-// useAllocateDevice.js
 import { useState } from 'react';
 import axios from 'axios';
 
@@ -10,12 +9,11 @@ const useEditDevice = () => {
     loading: false,
   });
 
-  const allocateDevice = async (deviceId, name, userId) => {
+  const allocateDevice = async (deviceId, userId) => {
     try {
       setAllocateDeviceResult({ success: null, data: null, errors: null, loading: true });
 
-      const response = await axios.put(`http://localhost:8000/api/devices/allocate/${deviceId}`, {
-        name,
+      const response = await axios.put(`http://localhost:8000/api/device/allocate/${deviceId}`, {
         userId,
       });
 

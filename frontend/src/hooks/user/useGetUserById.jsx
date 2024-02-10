@@ -8,7 +8,7 @@ const useGetUserById = (userId) => {
   useEffect(() => {
     const fetchUserById = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/users/${userId}`);
+        const response = await axios.get(`http://localhost:8000/api/user/${userId}`);
         setUser(response.data);
       } catch (error) {
         console.error('Error fetching user by ID:', error);

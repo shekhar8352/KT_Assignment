@@ -13,7 +13,7 @@ const useMisState = () => {
     try {
       setChangeMISStateResult({ success: null, data: null, errors: null, loading: true });
 
-      const response = await axios.put(`http://localhost:8000/api/devices/change-mis/${deviceId}`, {
+      const response = await axios.put(`http://localhost:8000/api/device/change-mis/${deviceId}`, {
         mis,
       });
 

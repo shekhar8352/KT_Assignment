@@ -13,7 +13,7 @@ const useLightState = () => {
     try {
       setChangeLightStateResult({ success: null, data: null, errors: null, loading: true });
 
-      const response = await axios.put(`http://localhost:8000/api/devices/change-light/${deviceId}`, {
+      const response = await axios.put(`http://localhost:8000/api/device/change-light/${deviceId}`, {
         light,
       });
 

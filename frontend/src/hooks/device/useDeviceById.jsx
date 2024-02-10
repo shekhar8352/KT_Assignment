@@ -13,7 +13,7 @@ const useDeviceById = (deviceId) => {
   useEffect(() => {
     const fetchDeviceById = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/devices/${deviceId}`);
+        const response = await axios.get(`http://localhost:8000/api/device/${deviceId}`);
 
         setDeviceByIdResult({
           success: true,

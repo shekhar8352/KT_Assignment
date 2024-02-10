@@ -14,10 +14,9 @@ const useCreateDevice = () => {
     try {
       setCreateDeviceResult({ success: null, data: null, errors: null, loading: true });
 
-      const response = await axios.post('http://localhost:8000/api/devices/create', {
+      const response = await axios.post('http://localhost:8000/api/device/create', {
         name,
         alloted_to_user,
-        state,
       });
 
       setCreateDeviceResult({ success: true, data: response.data, errors: null, loading: false });
